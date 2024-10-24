@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Confirm Deletion{% endblock %}
+
+{% block content %}
+<h2>Confirm Deletion</h2>
+<p>Are you sure you want to delete the food item "{{ food.name }}"?</p>
+
+<form action="{% url 'menu:delete_food' food.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a href="{% url 'menu:food_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
