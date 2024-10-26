@@ -12,4 +12,8 @@ urlpatterns = [
     path('login/', views.login, name='login'),   
     path('logout/', views.logout, name='logout'),
     path('register/', views.register, name='register'),
+    path('food/<int:pk>/like/', views.like_food, name='like_food'),
+    path('food/<int:pk>/add_comment/', views.add_comment, name='add_comment'),
+    path('comment/<int:comment_id>/update/', views.update_comment, name='update_comment'),
+    path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
 ]
