@@ -1,38 +1,42 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Food, Comment
+from .models import Food, Comment, FoodType  # Ensure FoodType is imported
 
 class FoodForm(forms.ModelForm):
     class Meta:
         model = Food
         fields = ['food_type', 'name', 'ingredients', 'price']
         widgets = {
-            'food_type': forms.TextInput(attrs={
+            'food_type': forms.Select(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter food type',
                 'aria-label': 'Food Type',
-                'required': True 
+                'required': True,
             }),
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter food name',
                 'aria-label': 'Food Name',
-                'required': True 
+                'required': True,
             }),
             'ingredients': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3,
                 'placeholder': 'Enter ingredients',
                 'aria-label': 'Ingredients',
-                'required': True 
+                'required': True,
             }),
             'price': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter price',
                 'aria-label': 'Price',
-                'required': True 
+                'required': True,
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(FoodForm, self).__init__(*args, **kwargs)
+        # Populate food_type choices dynamically from the FoodType model
+        self.fields['food_type'].queryset = FoodType.objects.all()
 
 
 class LoginForm(forms.Form):
@@ -42,7 +46,7 @@ class LoginForm(forms.Form):
             'class': 'form-control',
             'placeholder': 'Enter your username',
             'aria-label': 'Username',
-            'required': True 
+            'required': True,
         })
     )
     password = forms.CharField(
@@ -50,7 +54,7 @@ class LoginForm(forms.Form):
             'class': 'form-control',
             'placeholder': 'Enter your password',
             'aria-label': 'Password',
-            'required': True 
+            'required': True,
         })
     )
 
@@ -60,13 +64,13 @@ class RegistrationForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Enter your password',
         'aria-label': 'Password',
-        'required': True 
+        'required': True,
     }))
     password_confirm = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': 'Confirm your password',
         'aria-label': 'Confirm Password',
-        'required': True 
+        'required': True,
     }), label='Confirm Password')
 
     class Meta:
@@ -77,13 +81,13 @@ class RegistrationForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Enter your username',
                 'aria-label': 'Username',
-                'required': True 
+                'required': True,
             }),
             'email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter your email',
                 'aria-label': 'Email',
-                'required': True  
+                'required': True,
             }),
         }
 
@@ -106,6 +110,6 @@ class CommentForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': 'Add a comment...',
                 'aria-label': 'Comment Content',
-                'required': True   
+                'required': True,
             }),
         }
