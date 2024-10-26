@@ -1,39 +1,38 @@
 {% extends 'base.html' %}
 {% block title %}Food List{% endblock %}
-
 {% block content %}
-<h2>Food List</h2>
-<h5>Warning: Only admin or the user who added food can edit or delete it.</h5>
-
-{% if request.user.is_authenticated %}
-    <a href="{% url 'menu:add_food' %}" class="btn btn-primary mb-3">Add Food</a>
-{% endif %}
-
-<ul class="list-group">
-    {% for food in foods %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        <a href="{% url 'menu:food_detail' food.pk %}">{{ food.name }}</a> - ${{ food.price }} 
-        <div>
-            {% if request.user.is_superuser or food.created_by == request.user %}
-                <a href="{% url 'menu:edit_food' food.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                <form action="{% url 'menu:delete_food' food.pk %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            {% else %}
-                <span class="text-muted">You cannot edit or delete this item.</span>
-            {% endif %}
-        </div>
-    </li>
-    {% endfor %}
-
-    <ul style="margin-top: 500px;">
-        <li>Name:admin password:admin</li>
-        <li>Name:ID1700 password:admin </li>
+<div class="container mt-4">
+    <h2 class="mb-4">Food List</h2>
+    <h5 class="mb-3 text-danger">Warning: Only admin or the user who added food can edit or delete it.</h5>
+    <ul class="list-group mb-4">
+        {% for food in foods %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'menu:food_detail' food.pk %}" class="text-decoration-none">{{ food.name }}</a> - ${{ food.price }}
+            <div>
+                {% if request.user.is_superuser or food.created_by == request.user %}
+                    <a href="{% url 'menu:edit_food' food.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{% url 'menu:delete_food' food.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                {% else %}
+                    <span class="text-muted">You cannot edit or delete this item.</span>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
     </ul>
-</ul>
-
-{% if not request.user.is_authenticated %}
+    {% if request.user.is_authenticated %}
+    <div class="text-center mb-4">
+        <a href="{% url 'menu:add_food' %}" class="btn btn-primary w-50">Add Food</a>
+    </div>
+    <ul style="margin-top: 300px;">
+        <li>Name: admin password: admin</li>
+        <li>Name: ID1700 password: admin </li>
+    </ul>
+    {% endif %}
+    {% if not request.user.is_authenticated %}
     <p class="text-muted">Please log in to interact with the food items.</p>
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}

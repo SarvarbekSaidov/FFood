@@ -99,16 +99,18 @@ def add_comment(request, pk):
 @login_required
 def update_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
+    food = comment.food  
     if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
             messages.success(request, 'Comment updated successfully.')
-            return redirect('menu:food_detail', pk=comment.food.pk)
+            return redirect('menu:food_detail', pk=food.pk) 
     else:
         form = CommentForm(instance=comment)
     
-    return render(request, 'comment_form.html', {'form': form})
+    return render(request, 'comment_form.html', {'form': form, 'food': food})   
+
 
 @login_required
 def delete_comment(request, comment_id):

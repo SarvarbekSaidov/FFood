@@ -1,14 +1,40 @@
 {% extends 'base.html' %}
-
-
-{% block title %}Add/Edit Food{% endblock %}
-
+{% block title %}{{ form.instance.pk|yesno:"Edit,Add" }} Food{% endblock %}
 {% block content %}
-<h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Food</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{% url 'menu:food_list' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="mb-0">{{ form.instance.pk|yesno:"Edit,Add" }} Food</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="id_name">Food Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="id_food_type">Food Type</label>
+                            {{ form.food_type }}
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="id_ingredients">Ingredients</label>
+                            {{ form.ingredients }}
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="id_price">Price</label>
+                            {{ form.price }}
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                            <a href="{% url 'menu:food_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
