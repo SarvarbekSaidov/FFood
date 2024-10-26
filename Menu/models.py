@@ -26,6 +26,7 @@ class Food(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Created By", related_name="foods", default=1)  # Provide a default user ID
     created_at = models.DateTimeField(default=timezone.now, verbose_name="Created At")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+    
 
     class Meta:
         verbose_name_plural = "Foods"

@@ -1,12 +1,72 @@
 {% extends 'base.html' %}
-
 {% block title %}{{ food.name }}{% endblock %}
-
 {% block content %}
-<h2>{{ food.name }}</h2>
-<p><strong>Type:</strong> {{ food.food_type }}</p>
-<p><strong>Ingredients:</strong> {{ food.ingredients }}</p>
-<p><strong>Price:</strong> ${{ food.price }}</p>
-<p><strong>Views:</strong> {{ food.view_count }}</p>
-<a href="{% url 'menu:food_list' %}" class="btn btn-secondary">Back to List</a>
+<div class="container mt-4">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ food.name }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Type:</strong> {{ food.food_type }}</p>
+            <p><strong>Ingredients:</strong> {{ food.ingredients }}</p>
+            <p><strong>Price:</strong> ${{ food.price }}</p>
+            <p><strong>Views:</strong> {{ food.view_count }}</p>
+            <div class="likebtn-wrapper mb-3" data-identifier="food_{{ food.pk }}"></div>
+            <script>
+                (function(d,e,s){
+                    if(d.getElementById("likebtn_wjs")) return;
+                    a = d.createElement(e);
+                    m = d.getElementsByTagName(e)[0];
+                    a.async = 1;
+                    a.id = "likebtn_wjs";
+                    a.src = "//w.likebtn.com/js/w/widget.js";
+                    m.parentNode.insertBefore(a, m);
+                })(document,"script");
+            </script>
+            <a href="{% url 'menu:food_list' %}" class="btn btn-secondary mt-3">Back to List</a>
+        </div>
+    </div>
+    <h3 class="mt-4">Comments</h3>
+    <div class="card mb-4">
+        <div class="card-body">
+            {% if comments %}
+                <ul class="list-group mb-3">
+                    {% for comment in comments %}
+                        <li class="list-group-item">
+                            <p>{{ comment.content }}</p>
+                            <small class="text-muted">By {{ comment.user.username }} on {{ comment.created_at|date:"F j, Y, g:i a" }}</small>
+                            {% if comment.user == user %}
+                                <div class="mt-2">
+                                    <a href="{% url 'menu:update_comment' comment.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <form action="{% url 'menu:delete_comment' comment.id %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No comments yet. Be the first to comment!</p>
+            {% endif %}
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+        <h4>Add a Comment</h4>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="{% url 'menu:add_comment' food.pk %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ comment_form.content }}
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit Comment</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <p><a href="{% url 'menu:login' %}">Log in</a> to add a comment.</p>
+    {% endif %}
+</div>
 {% endblock %}
