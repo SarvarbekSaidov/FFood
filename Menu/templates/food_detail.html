@@ -46,10 +46,10 @@
                             <small class="text-muted">By {{ comment.user.username }} on {{ comment.created_at|date:"F j, Y, g:i a" }}</small>
                             {% if comment.user == user %}
                                 <div class="mt-2">
-                                    <a href="{% url 'menu:update_comment' comment.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="{% url 'menu:update_comment' comment.id %}" class="btn btn-sm btn-outline-secondary edit">Edit</a>
                                     <form action="{% url 'menu:delete_comment' comment.id %}" method="post" style="display: inline;">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete">Delete</button>
                                     </form>
                                 </div>
                             {% endif %}
