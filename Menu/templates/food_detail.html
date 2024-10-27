@@ -17,7 +17,6 @@
             <p><strong>Price:</strong> ${{ food.price }}</p>
             <p><strong>Views:</strong> {{ food.view_count }}</p>
 
-            <!-- Like button widget -->
             <div class="likebtn-wrapper mb-3" data-identifier="food_{{ food.pk }}"></div>
             <script>
                 (function(d,e,s){
@@ -31,11 +30,11 @@
                 })(document, "script");
             </script>
             
-            <a href="{% url 'menu:food_list' %}" class="btn btn-secondary mt-3">Back to List</a>
         </div>
+        <a href="{% url 'menu:food_list' %}" class="btn btn-secondary mt-3">Back to List</a>
+
     </div>
 
-    <!-- Comments section -->
     <h3 class="mt-4">Comments</h3>
     <div class="card mb-4">
         <div class="card-body">
