@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Food, Comment, FoodType  # Ensure FoodType is imported
+from .models import Food, Comment, FoodType  
 
 class FoodForm(forms.ModelForm):
     class Meta:
         model = Food
-        fields = ['food_type', 'name', 'ingredients', 'price']
+        fields = ['food_type', 'name', 'ingredients', 'price', 'image', 'preparation_time']
         widgets = {
             'food_type': forms.Select(attrs={
                 'class': 'form-control',
@@ -31,13 +31,20 @@ class FoodForm(forms.ModelForm):
                 'aria-label': 'Price',
                 'required': True,
             }),
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'aria-label': 'Food Image',
+            }),
+            'preparation_time': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Preparation time in minutes',
+                'aria-label': 'Preparation Time',
+            }),
         }
 
     def __init__(self, *args, **kwargs):
         super(FoodForm, self).__init__(*args, **kwargs)
-        # Populate food_type choices dynamically from the FoodType model
         self.fields['food_type'].queryset = FoodType.objects.all()
-
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -57,7 +64,6 @@ class LoginForm(forms.Form):
             'required': True,
         })
     )
-
 
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -98,7 +104,6 @@ class RegistrationForm(forms.ModelForm):
         if password and password_confirm and password != password_confirm:
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
-
 
 class CommentForm(forms.ModelForm):
     class Meta:

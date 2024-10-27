@@ -26,7 +26,8 @@ class Food(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Created By", related_name="foods", default=1)  # Provide a default user ID
     created_at = models.DateTimeField(default=timezone.now, verbose_name="Created At")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
-    
+    image = models.ImageField(upload_to='food_images/', verbose_name="Food Image", blank=True, null=True)
+    preparation_time = models.PositiveIntegerField(verbose_name="Preparation Time (minutes)", blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Foods"
@@ -38,6 +39,7 @@ class Food(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 class Like(models.Model):
