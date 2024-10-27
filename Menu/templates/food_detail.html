@@ -6,26 +6,36 @@
         <div class="card-header bg-primary text-white">
             <h2 class="mb-0">{{ food.name }}</h2>
         </div>
+
+        {% if food.image %}
+        <img src="{{ food.image.url }}" class="card-img-top" alt="{{ food.name }}" style="height: 300px; object-fit: cover;">
+        {% endif %}
+
         <div class="card-body">
             <p><strong>Type:</strong> {{ food.food_type }}</p>
             <p><strong>Ingredients:</strong> {{ food.ingredients }}</p>
             <p><strong>Price:</strong> ${{ food.price }}</p>
             <p><strong>Views:</strong> {{ food.view_count }}</p>
+
+            <!-- Like button widget -->
             <div class="likebtn-wrapper mb-3" data-identifier="food_{{ food.pk }}"></div>
             <script>
                 (function(d,e,s){
                     if(d.getElementById("likebtn_wjs")) return;
-                    a = d.createElement(e);
-                    m = d.getElementsByTagName(e)[0];
+                    var a = d.createElement(e);
+                    var m = d.getElementsByTagName(e)[0];
                     a.async = 1;
                     a.id = "likebtn_wjs";
                     a.src = "//w.likebtn.com/js/w/widget.js";
                     m.parentNode.insertBefore(a, m);
-                })(document,"script");
+                })(document, "script");
             </script>
+            
             <a href="{% url 'menu:food_list' %}" class="btn btn-secondary mt-3">Back to List</a>
         </div>
     </div>
+
+    <!-- Comments section -->
     <h3 class="mt-4">Comments</h3>
     <div class="card mb-4">
         <div class="card-body">
@@ -52,6 +62,7 @@
             {% endif %}
         </div>
     </div>
+
     {% if user.is_authenticated %}
         <h4>Add a Comment</h4>
         <div class="card mb-4">
